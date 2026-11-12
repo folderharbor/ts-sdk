@@ -1,6 +1,8 @@
 # Changelog
 This is mostly just a placeholder until I build these into [fh.novatea.dev](https://fh.novatea.dev)! :3 \
 This SDK will stay pegged to the [server's version](https://fh.novatea.dev/server) for the first two numbers, but the patch version may change.
+## v1.1.6
+Fixes cases where things were called dates in the types (specifically `FHSession` and `FHLogs`) but actually returned ISO date strings. Now, they return proper JS Date objects! This shouldn't require any code changes past just updating.
 ## v1.1.5
 Removes references from the docs (which cluttered them pointlessly), no code changes were made here!
 ## v1.1.4

@@ -17,7 +17,14 @@ export class MeResource {
    * const info = await client.me.info();
    * ```
    */
-  public info = async (): Promise<FHSelfInfo> => { return await this.#client.request<FHSelfInfo>("me"); }
+  public info = async (): Promise<FHSelfInfo> => {
+    const res = await this.#client.request<FHSelfInfo>("me");
+    for (const session of res.sessions) {
+      session.createdAt = new Date(session.createdAt);
+      session.expiry = new Date(session.expiry);
+    }
+    return res;
+  }
   /**
    * Updates the current user's information.
    * 

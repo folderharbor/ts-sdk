@@ -34,7 +34,16 @@ export class UsersResource {
    * const user = await client.admin.users.get(1);
    * ```
    */
-  public get = async (userID: number): Promise<FHFullUser | FHLimitedUser> => { return await this.#client.request<FHFullUser | FHLimitedUser>(`admin/users/${userID}`); }
+  public get = async (userID: number): Promise<FHFullUser | FHLimitedUser> => { 
+    const res = await this.#client.request<FHFullUser | FHLimitedUser>(`admin/users/${userID}`);
+    if (res.access === "full" && res.sessions) {
+      for (const session of res.sessions) {
+        session.createdAt = new Date(session.createdAt);
+        session.expiry = new Date(session.expiry);
+      }
+    }
+    return res;
+  }
   /**
    * Edits a user's information.
    * This method is limited to their username, password, and clearing their failed logins.

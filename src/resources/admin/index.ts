@@ -32,7 +32,13 @@ export class AdminResource {
    * const oldestLogs = await client.admin.logs(latestLogs.pageCount);
    * ```
    */
-  public logs = async (page?: number): Promise<FHLogs> => { return await this.#client.request<FHLogs>(`admin/logs${page ? `?page=${page}` : ""}`) }
+  public logs = async (page?: number): Promise<FHLogs> => { 
+    const res = await this.#client.request<FHLogs>(`admin/logs${page ? `?page=${page}` : ""}`);
+    for (const entry of res.logs ?? []) {
+      entry.createdAt = new Date(entry.createdAt);
+    }
+    return res;
+  }
   /**
    * Gets a list of permissions that can be applied to users or roles.
    * 
